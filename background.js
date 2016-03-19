@@ -87,6 +87,8 @@ var counters = {"facebook.com": 0, "twitter.com": 0};
 var validTitleFormat  = /^\(([^)]+)\)/  //(x) new updates
 //counter for toolbar icon
 var currentCounter = 0
+// id of the HTML element to be  updated
+var ID_TABLIST = "status"
 // validates domain.com for https,http,ftp for domain.com , x.domain.com etc
 //var validDomains = /^(https?|ftp):\/\/[.a-z]+\.domain\.com[.a-z0-9/-]+/  
 
@@ -97,44 +99,75 @@ var currentCounter = 0
 chrome.webRequest.onCompleted.addListener( function(details) {
 
   // check if the details are valid
-  try{
+  
     if (!isValidObject(details) || details.tabId==null || details.tabId<0 ){ return false}
 
     var tabId = parseInt(details.tabId);
     // get tab Details 
     var tabDetails = getTabDetails(tabId);
-    if(!isValidObject(tabDetails) || tabDetails.url==null){ return false}
-    // check if url is valid
-    if(!isValidUrl(tabDetails.url)){ return false}
-    // check if title is valid
-    if(!isValidTitle(tabDetails.title)){return  false}
-    // get updated values
-    var validUrl = isValidUrl(tabDetails.url);
-    var updates = {validUrl : getUpdates(tabDetails.title) };
-
-    //update counters 
-    updateCounters(updates);
-    //update UI and icon
-    updateIcon(updates);
-    updateUIHtml(updates);
+    
     // wrap up
-  }
-  catch(err){
-    console.log(err);
-  }
+ 
+ 
   
 
 
-});
+},
+{
+ urls: ["<all_urls>"]
+},
+["responseHeaders"]);
 
+// switch to any tab of any window
+function switchTab(window,id) { 
+//alert(id)
+  chrome.windows.update(parseInt(window), {focused: true})
+  chrome.tabs.update(parseInt(id), {active: true});
+    
+};
+
+// get tab list for popup html
+function getTabList(){
+  
+  chrome.tabs.query({}, function(tabs) { 
+    //console.log(tabs)
+    
+    if(isValidObject(tabs)){
+      var tabHtml = createListHtml(tabs);
+      // show poup html
+      updateUIHtml(ID_TABLIST,tabHtml);
+      //reset the counter
+      resetCurrentCounter();
+      //update the icon text
+      updateIcon();
+    }
+
+  
+});
+  
+}
 
 // Get url from tabID
 function getTabDetails(tabId){
   if(tabId<0){ return false}
 
-  chrome.tabs.get(tabId,function(tab){
-        if(isValidObject(tab)){
-           return tab;
+  chrome.tabs.get(tabId,function(tabDetails){
+        if(isValidObject(tabDetails)){
+            if(!isValidObject(tabDetails) || tabDetails.url==null){ return false}
+            // check if url is valid
+            var validUrl = isValidUrl(tabDetails.url);
+            if(!validUrl){ return false}
+            // check if title is valid
+            if(!isValidTitle(tabDetails.title)){return  false}
+            // get updated values
+            
+            var updates = {validUrl : getUpdates(tabDetails.title) };
+
+            //update counters 
+            updateCounters(updates);
+            //update UI and icon
+            updateIcon(updates);
+            updateUIHtml(updates);
         }else{ return false}
   });
 }
@@ -202,23 +235,11 @@ function resetCurrentCounter(){
 // update the toolbar icon text
 function updateIcon(){
   //if(currentCounter<=0){ return false}
-  chrome.browserAction.setBadgeText(  {text:currentCounter}      );
+  var updateText = (currentCounter!=0) ? currentCounter.toString() : "";
+  chrome.browserAction.setBadgeText(  {text: updateText }      );
 }
 
-// get tab list for popup html
-function getTabList(){
-  var tabList = {};
-  chrome.tabs.query({}, function(tabs) { 
-    if(!isValidObject(tabs)){return false;}
-    for(var tab in tabs){
-    if(tabs.hasOwnProperty(tab) && isValidUrl(tab.url)){
-      tabList.push(tab);
-    }
-    return tabList;
-  }
-});
-  
-}
+
 
 
 
@@ -261,6 +282,30 @@ function getHostName(url) {
     }
 }
 
+
+//UPDATE UI FUNCTIONS
+
+// update the popup html
+function updateUIHtml(eid, evalue){
+  var data  = {id:eid,val:evalue}
+    chrome.extension.sendRequest({method: 'updateUIHtml', data: data}, function(response) {
+      return true;
+    });
+
+}
+
+// create tab list html
+function createListHtml(tabs){
+  var tabList = "<ul>";
+  for(var i=0;i<tabs.length;i++){
+    tabList+="<li><a id='"+tabs[i].windowId+"|"+tabs[i].id+ "' href='"+tabs[i].url+"'>";
+    tabList+="<img src='"+tabs[i].favIconUrl+"' style='width:16px;height:16px;'>";
+    tabList+=tabs[i].title;
+    tabList+="</a></li>";
+  }
+  tabList+="</ul>";
+  return tabList;
+}
 
 /* 
 

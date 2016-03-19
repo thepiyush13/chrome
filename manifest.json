@@ -13,14 +13,14 @@
     "default_popup": "popup.html"
   },
   "content_scripts": [{
-        "matches": ["http://*/*", "https://*/*"],
+        "matches": ["<all_urls>"],
         "js": ["popup.js"]
     }],
   "permissions": [
     "activeTab",
     "tabs",
     "webRequest",
-    "webRequestBlocking",
+    
         "<all_urls>"
   ]
 }

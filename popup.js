@@ -24,17 +24,6 @@
 // });
 
 
-// // document.addEventListener("click", function(){ 
-
-// // var cid = (this.activeElement.id);
-// // var temp = cid.split("|")
-// // var window = temp[0]
-// // var id = temp[1]
-// //  chrome.runtime.getBackgroundPage(function(eventPage) {
-// //        eventPage.switchTab(window,id);
-// //     });
-
-// // });
 
 // // chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
 // //    //alert(changeInfo.url);
@@ -87,8 +76,7 @@
 	
 // }
 
-//init
-var ID_TABLIST = "status"
+
 
 //Check if user has clicked the Icon button in the toolbar:
 document.addEventListener('DOMContentLoaded', function() {
@@ -96,39 +84,46 @@ document.addEventListener('DOMContentLoaded', function() {
 
 	//get required tabs
 	chrome.runtime.getBackgroundPage(function(bgPage) {
-		var tabs = bgPage.getTabList();
-		if(bgPage.isValidArray(tabs)){
-			
-			// show poup html
-			updateUIHtml(ID_TABLIST,tabs);
-			//reset the counter
-			bgPage.resetCurrentCounter();
-			//update the icon text
-			bgPage.updateIcon();
-		}
+		 bgPage.getTabList();
+		
 	});
 
 	//wrap up
 
 });
 
+// Evenet listner for tab switch 
+document.addEventListener("click", function(){ 
 
-// update the popup html
-function updateUIHtml(id, value){
-	document.getElementById(id).innerHTML = value;
+var cid = (this.activeElement.id);
+var temp = cid.split("|")
+if(cid==null || cid=="" || temp.length<2 ){return false;}
+var window = temp[0]
+var id = temp[1]
+ chrome.runtime.getBackgroundPage(function(bgPage) {
+       bgPage.switchTab(window,id);
+    });
+
+});
+
+
+//main function which updates the UI elements of popup page
+function updateHtml(id, value){
+  //alert('hello')
+  document.getElementById(id).innerHTML = value;
 }
 
-// create tab list html
-function createListHtml(tabs){
-	var tabList = "<ul>";
-	for(var i=0;i<tabs.length;i++){
- 		tabList+="<li><a id='"+tabs[i].windowId+"|"+tabs[i].id+	"' href='"+tabs[i].url+"'>";
- 		tabList+="<img src='"+tabs[i].favIconUrl+"' style='width:16px;height:16px;'>";
- 		tabList+=tabs[i].title;
- 		tabList+="</a></li>";
- 	}
- 	tabList+="</ul>";
- 	return tabList;
-}
+
+chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
+	switch (request.method) 
+	{
+	case 'updateUIHtml':
+		//localTicker.currentTicker = request.data;
+		var data = request.data;
+		updateHtml(data.id, data.val)
+		break;
+	}
+});
+
 
 //Check if user has closed any important tabs
