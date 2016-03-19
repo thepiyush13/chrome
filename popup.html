@@ -1,12 +1,8 @@
 <!doctype html>
-<!--
- This page is shown when the extension button is clicked, because the
- "browser_action" field in manifest.json contains the "default_popup" key with
- value "popup.html".
- -->
+
 <html>
   <head>
-    <title>Getting Started Extension's Popup</title>
+    <title>pingify : Chrome addon for real time social media notification</title>
     <style>
       body {
         font-family: "Segoe UI", "Lucida Grande", Tahoma, sans-serif;
@@ -18,9 +14,30 @@
         text-overflow: ellipsis;
         overflow: hidden;
         max-width: 400px;
+        text-align: center;
+        margin: 0px;
       }
       .links{
+        margin: 0px;
+        padding: 0px;
         list-style: none;
+            
+
+      }
+      .link{
+        border: 1px solid rgba(128, 128, 128, 0.41);
+        padding: 13px;
+    margin-bottom: 7px;
+      }
+      .favicon{
+        width:48px;
+        height:48px;'
+      }
+      .notiText{
+        text-decoration: none;
+      }
+      .popupLink{
+        text-decoration: none;
       }
 
     </style>

@@ -1,84 +1,6 @@
-// var statusText = "<h1>hello</h1>	"
-// // This function is called onload in the popup code
-// // function switchTab(window,id) { 
-// // //alert(id)
-// // chrome.windows.update(parseInt(window), {focused: true})
-// //      chrome.tabs.update(parseInt(id), {active: true});
-    
-// // }; 
-
-// // chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
-// //    //alert(changeInfo.url);
-// //    alert("hello")
-// // });
-
-
-
-// //setInterval(function(){ alert("works") }, 2000)
-
-// // chrome.webRequest.onBeforeSendHeaders.addListener(function(details){
-// //    alert("tab updated");
-// //    //alert("hello")
-// // });
-
-// // var requestFilter = {
-// //     urls: [ "<all_urls>" ]
-// //   },
-
-// //   extraInfoSpec = ['requestHeaders','blocking'],
-
-// //   handler = function( details ) {
-
-// //    chrome.browserAction.setBadgeText({text:"request"}})
-
-// //   };
-
-// // chrome.webRequest.onBeforeSendHeaders.addListener( handler, requestFilter, extraInfoSpec );
-
-// chrome.webRequest.onCompleted.addListener(
-//         function(details) {
-//         	//alert("hello");
-//      //    	chrome.browserAction.setBadgeText(
-// 	   	// {text:"007"}
-// 	   	// )
-//           var tabId = parseInt(details.tabId);
-         
-//           var newText = "";
-//           var regExp = /\(([^)]+)\)/;
-//           if(tabId<0  ){
-//           	return;
-//           }
-//           chrome.tabs.get( 
-//           	parseInt(tabId), 
-//           	function(tab){
-//           		// if (tab.url.indexOf("twitter.com") <=-1){
-//           		// 	return
-//           		// }
-          		 
-//           	var matches = regExp.exec(tab.title);
-//           	newText = matches[1];
-          
-
-// if (newText==""){
-//          	return
-//          }
-//           chrome.browserAction.setBadgeText( 	{text:newText} 	   	)
-//           //document.getElementById('status').innerHTML = "<h1>hello</h1>";
-//           statusText= newText
-
-//           });
-
-         
-
-//           //END FUNCTION
-//         },
-//         {urls: ["<all_urls>"]},
-//         ["responseHeaders"]
-//       );
-
-
 
 //Keep important data fields here 
+//icon file link: http://www.iconarchive.com/show/100-flat-2-icons-by-graphicloads/msg-2-icon.html
 //urls which are to be processed
 var validUrls = {"facebook.com":true, "twitter.com":true};
 //no of updates for each url
@@ -160,8 +82,8 @@ function getTabDetails(tabId){
             // check if title is valid
             if(!isValidTitle(tabDetails.title)){return  false}
             // get updated values
-            
-            var updates = {updateUrl : getUpdates(tabDetails.title) };
+            var updates = {}
+            updates[curValidUrl] =  getUpdates(tabDetails.title) ;
 
             //update counters 
             updateCounters(updates);
@@ -213,10 +135,11 @@ function updateCounters(updates){
   if(!isValidObject(updates) ){ return false;}
   for(var url in updates){
     if(updates.hasOwnProperty(url)){
-      counters[url] = updates[url];      
+      counters[url] = parseInt(updates[url]);      
     }
     
   }
+  console.log(counters)
   return updateCurrentCounter();
 }
 
@@ -299,17 +222,19 @@ function updateUIHtml(eid, evalue){
 
 // create tab list html
 function createListHtml(tabs,filterValids){
-  var tabList = "<ul class='links'>";
+  var tabList = "<div class='links'>";
   for(var i=0;i<tabs.length;i++){
     if( filterValids==false || ( filterValids==true &&  isValidUrl(tabs[i].url) ) ){
-      tabList+="<li><a id='"+tabs[i].windowId+"|"+tabs[i].id+ "' href='"+tabs[i].url+"'>";
-      tabList+="<img src='"+tabs[i].favIconUrl+"' style='width:16px;height:16px;'>";
-      tabList+=tabs[i].title;
-      tabList+="</a></li>";
+      var update = counters[isValidUrl(tabs[i].url)];
+      //alert(update)
+      tabList+="<div class='link'><a class='popupLink' id='"+tabs[i].windowId+"|"+tabs[i].id+ "' href='"+tabs[i].url+"'>";
+      tabList+="<img src='"+tabs[i].favIconUrl+"' class='favicon'> <br/>";
+      tabList+= "<spn class='notiText' >"+update+"</span>"//abs[i].title;
+      tabList+="</a></div>";
     }
     
   }
-  tabList+="</ul>";
+  tabList+="</div>";
   return tabList;
 }
 

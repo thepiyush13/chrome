@@ -23,6 +23,9 @@
 	2. pooling or frequently checking title takes too much of memory
 	3. I dont have much time to build a perfect solution :)
 
+# credits :
+	Icon files : http://www.iconarchive.com/show/100-flat-2-icons-by-graphicloads
+
 # Author: Piyush Tripathi @ Texas A&M University
 
 # v1: works only for social media(twitter and facebook)
