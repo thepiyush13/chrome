@@ -1,0 +1,100 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Refactored date examples</title>
+ 
+  <link rel="stylesheet" href="https://code.jquery.com/qunit/qunit-1.22.0.css">
+  <script src="http://code.jquery.com/qunit/qunit-1.22.0.js"></script>
+  <script src="background.js"></script>
+ 
+  <script>
+
+//   var validUrls = ["facebook.com", "twitter.com"];
+// var counters = {"facebook.com": 0, "twitter.com": 0};
+// var validTitleFormat  = "/\(([^)]+)\)/"  //(x) new updates
+// var currentCounter = 0
+  //testing isValidObject function
+  QUnit.test("isValidObject test", function( assert ) {
+    assert.equal(isValidObject(["Saab", "Volvo", "BMW"]), true);
+    assert.equal(isValidObject(), false);
+    assert.equal(isValidObject("ss,ss,,ss"), false);
+    assert.equal(isValidObject(true), false);
+    assert.equal(isValidObject(counters), true);
+    assert.equal(isValidObject(validUrls), true);
+  });
+
+//testing isValidObject function
+  QUnit.test("updateCurrentCounter", function( assert ) {
+    counters = {"facebook.com": 5, "twitter.com": 5};
+    assert.equal(updateCurrentCounter(), 10);
+    counters = {"facebook.com": 0, "twitter.com": 0};
+    assert.equal(updateCurrentCounter(), 0);
+    counters = {"facebook.com": 1, "twitter.com": 0};
+    assert.equal(updateCurrentCounter(), 1);
+    counters = {"facebook.com": -1, "twitter.com": -2};
+    assert.equal(updateCurrentCounter(), -3);
+    
+  });
+
+  // //testing isValidObject function
+  QUnit.test("updateCounters", function( assert ) {
+    counters = {"facebook.com": 5, "twitter.com": 5};
+    assert.equal(updateCounters(counters), 10);
+    counters = {"facebook.com": 0, "twitter.com": 0};
+    assert.equal(updateCounters(counters), 0);
+    counters = {"facebook.com": 1, "twitter.com": 0};
+    assert.equal(updateCounters(counters), 1);
+    counters = {"facebook.com": -1, "twitter.com": -2};
+    assert.equal(updateCounters(counters), -3);
+    
+  });
+
+  // //testing isValidObject function
+  QUnit.test("getUpdates", function( assert ) {
+    assert.equal(getUpdates("(20) News about( Arsenal on Twitter"), 20);
+    assert.equal(getUpdates(""), false);
+    assert.equal(getUpdates("ss,ss,,ss"), false);
+    assert.equal(getUpdates(true), false);
+    assert.equal(getUpdates("(20) News about( Arsenal on Twitter"), 20);
+    assert.equal(getUpdates("(20) News about(22) Arsenal on Twitter"), 20);
+    assert.equal(getUpdates("(20) News about(10( Arsenal on Twitter"), 20);
+    assert.equal(getUpdates("(20) News about( Arsenal20) on Twitter"), 20);
+    assert.equal(getUpdates("News about()()()() Arsenal on Twitter"), false);
+    assert.equal(getUpdates("122 (2)News about()()()() Arsenal on Twitter"), false);
+    assert.equal(getUpdates("()()()News about()()()() Arsenal on Twitter"), false);
+    assert.equal(getUpdates("(1000000000000) News about Arsenal on Twitter"), 1000000000000);
+    assert.equal(getUpdates("Facebook"), false);
+    assert.equal(getUpdates("Facebook"), false);
+    assert.equal(getUpdates("Facebook(23)(1212)"), false);
+    assert.equal(getUpdates("(23) 0ok(23)(1212)"), 23);
+
+  });
+ // //testing isValidObject function
+  QUnit.test("isValidUrl", function( assert ) {
+    assert.equal(isValidUrl("https://twitter.com/search?f=tweets&vertical=news&q=Arsenal&src=tren"), "twitter.com");
+    assert.equal(isValidUrl(""), false);
+    assert.equal(isValidUrl("ss,ss,,ss"), false);
+    assert.equal(isValidUrl(true), false);
+    assert.equal(isValidUrl("https://twitter.com/i/search/timeline?f=tweets&vertical=news&q=Arsenal&src=tren&composed_count=0&include_available_features=1&include_entities=1&include_new_items_bar=true&interval=30000&latent_count=196&min_position=TWEET-710995589480194050-710999170220482561-BD1UO2FFu9QAAAAAAAAETAAAAAcAAAASAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"), "twitter.com");
+    assert.equal(isValidUrl("https://twitter.com/i/profiles/popup?user_id=703132746789457925&wants_hovercard=true&_=1458349611701"), "twitter.com");
+    assert.equal(isValidUrl("https://twitter.com/i/search/timeline?f=tweets&vertical=news&q=Arsenal&src=tren&composed_count=0&include_available_features=1&include_entities=1&include_new_items_bar=true&interval=30000&latent_count=203&min_position=TWEET-710995589480194050-710999287690178560-BD1UO2FFu9QAAAAAAAAETAAAAAcAAAASAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"), "twitter.com");
+    assert.equal(isValidUrl("http://twitter.com/i/search/"), "twitter.com");
+    assert.equal(isValidUrl("https://m.twitter.com/i/search/"), "twitter.com");
+    assert.equal(isValidUrl("https://www.twitter.com/i/search/"), "twitter.com");
+    assert.equal(isValidUrl("(https://abc.twitter.com/i/search/"), "twitter.com");
+    assert.equal(isValidUrl("https://twatter.com/GOAL_ID"), false);
+    assert.equal(isValidUrl("https://twittertwitter.com/GOAL_ID"), false);
+    assert.equal(isValidUrl("https://fb.com.twitter/GOAL_ID"), false);
+    assert.equal(isValidUrl("https://www.facebook.com/salegroups/?group_sell_ref=landing_page_bookmark&view=landing_page_suggested_groups"), "facebook.com");
+    assert.equal(isValidUrl("https://m.facebook.com/salegroups/?group_sell_ref=twitter.com&view=landing_page_suggested_groups"), "facebook.com");
+
+  });
+  </script>
+</head>
+<body>
+ 
+<div id="qunit"></div>
+ 
+</body>
+</html

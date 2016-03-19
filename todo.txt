@@ -1,0 +1,32 @@
+# pingify : Chrome addon for real time social media notification 
+# Description: A chrome addon that notifies any new update on any opened tab in chrome and allows to quickyl switch to it
+# Kws: addon, chrome, social media, tabs, easy , realtime, pingify
+# Use cases:
+	## user opens a non pingified tab
+	## user open a pingified tab
+	## user in on the current pingified tab
+	## user moves away from the current pingified tab
+	## user is busy doing his thing and an update occurs at pingified tab
+	## user checks the notification and switches to the tab
+	## user closes pingified tab
+	## ajax request but no update on the tab title
+	## ajax request but new title is not in valid formtat
+	## no internet connection
+# Components:
+	popup.js: script that gets activated when user clicks the pingify icon in the toolbar
+	background.js : acts like a modal and performs ajax listening and title value calcualtion
+	popup.html: html for popup UI
+	manifest.json : configuration file as per Google chrome recommendations
+
+# Issues: 
+	1. There is no tab title ajax update listener
+	2. pooling or frequently checking title takes too much of memory
+	3. I dont have much time to build a perfect solution :)
+
+# Author: Piyush Tripathi @ Texas A&M University
+
+# v1: works only for social media(twitter and facebook)
+# v2 : works for all the updatable tabs
+
+
+
