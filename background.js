@@ -127,13 +127,13 @@ function switchTab(window,id) {
 };
 
 // get tab list for popup html
-function getTabList(){
-  
+function getTabList(filterValids){
   chrome.tabs.query({}, function(tabs) { 
     //console.log(tabs)
     
     if(isValidObject(tabs)){
-      var tabHtml = createListHtml(tabs);
+      filterValids = (typeof filterValids == 'undefined') ? false : true;
+      var tabHtml = createListHtml(tabs,filterValids);
       // show poup html
       updateUIHtml(ID_TABLIST,tabHtml);
       //reset the counter
@@ -155,19 +155,22 @@ function getTabDetails(tabId){
         if(isValidObject(tabDetails)){
             if(!isValidObject(tabDetails) || tabDetails.url==null){ return false}
             // check if url is valid
-            var validUrl = isValidUrl(tabDetails.url);
-            if(!validUrl){ return false}
+            var curValidUrl = isValidUrl(tabDetails.url);
+            if(!curValidUrl){ return false}
             // check if title is valid
             if(!isValidTitle(tabDetails.title)){return  false}
             // get updated values
             
-            var updates = {validUrl : getUpdates(tabDetails.title) };
+            var updates = {updateUrl : getUpdates(tabDetails.title) };
 
             //update counters 
             updateCounters(updates);
             //update UI and icon
             updateIcon(updates);
-            updateUIHtml(updates);
+            // var tabHtml = createListHtml(tabs,filterValids);
+            // // show poup html
+            // updateUIHtml(ID_TABLIST,tabHtml);
+            
         }else{ return false}
   });
 }
@@ -295,13 +298,16 @@ function updateUIHtml(eid, evalue){
 }
 
 // create tab list html
-function createListHtml(tabs){
-  var tabList = "<ul>";
+function createListHtml(tabs,filterValids){
+  var tabList = "<ul class='links'>";
   for(var i=0;i<tabs.length;i++){
-    tabList+="<li><a id='"+tabs[i].windowId+"|"+tabs[i].id+ "' href='"+tabs[i].url+"'>";
-    tabList+="<img src='"+tabs[i].favIconUrl+"' style='width:16px;height:16px;'>";
-    tabList+=tabs[i].title;
-    tabList+="</a></li>";
+    if( filterValids==false || ( filterValids==true &&  isValidUrl(tabs[i].url) ) ){
+      tabList+="<li><a id='"+tabs[i].windowId+"|"+tabs[i].id+ "' href='"+tabs[i].url+"'>";
+      tabList+="<img src='"+tabs[i].favIconUrl+"' style='width:16px;height:16px;'>";
+      tabList+=tabs[i].title;
+      tabList+="</a></li>";
+    }
+    
   }
   tabList+="</ul>";
   return tabList;

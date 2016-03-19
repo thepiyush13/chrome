@@ -84,7 +84,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 	//get required tabs
 	chrome.runtime.getBackgroundPage(function(bgPage) {
-		 bgPage.getTabList();
+		 bgPage.getTabList(true); //filtered tab list
 		
 	});
 
