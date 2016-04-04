@@ -1,7 +1,7 @@
 # Pingify : 
-real time social media notifications on Google Chrome
+Real time social media notifications on Google Chrome
 # Description: 
-A chrome addon that notifies any new update on any of the opened social media tab  and allows to quickyl switch to it. Currently supports Facebook, Twitter, Linkedin.
+A chrome addon that notifies any new update on any of the opened social media tab  and allows to quickly switch to it. Currently supports Facebook, Twitter, Linkedin.
 # Benifits:
 	* Allows to check realtime social media updates without leaving the current tab
 	* Makes it easy to quickly switch to the tab you are interested in, from any window
@@ -13,10 +13,15 @@ A chrome addon that notifies any new update on any of the opened social media ta
 	* Does not need any sensitive data, password etc
 	* Low on memory consuption
 # Screenshots
-[[chrome/screenshots/main1.png]]
-[[chrome/screenshots/main2.png]]
-[[chrome/screenshots/main3.png]]
-[[chrome/screenshots/main4.png]]
+## Notifications
+![Screenshot](/screenshots/main1.png?raw=true "Screenshots")
+## Combined Notifications
+![Screenshot](/screenshots/main2.png?raw=true "Screenshots")
+## Expanded View
+![Screenshot](/screenshots/main3.png?raw=true "Screenshots")
+## Normal view
+![Screenshot](/screenshots/main4.png?raw=true "Screenshots")
+
 # Components:
 	popup.js: script that gets activated when user clicks the pingify icon in the toolbar
 	background.js : acts like a modal and performs ajax listening and title value calcualtion
