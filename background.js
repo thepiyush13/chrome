@@ -1,3 +1,14 @@
+/**
+ * background.js
+ *
+ * @license GNU GPL
+ * @version 0.3
+ * @author Piyush Tripathi ,  http://piyu.tk
+ * @updated 2016
+ *
+ *
+ */
+
 
 //Keep important data fields here 
 //icon file link: http://www.iconarchive.com/show/100-flat-2-icons-by-graphicloads/msg-2-icon.html
@@ -19,17 +30,6 @@ var ID_TABLIST = "status"
 
 
 
-
-
-
-
-
-
-
-
-
-
-
 /* 
 
 TESTED FUNCTIONS
@@ -45,18 +45,11 @@ isValidUrl (16)Rerun
 // Listen to any ajax update 
 chrome.webRequest.onCompleted.addListener( function(details) {
 
-  // check if the details are valid
-  //alert('ajax);
-  //processAllTabs();
+  // check if the details are valid  
   
-  if (!isValidObject(details) || details.tabId==null || details.tabId<0 ){ return false}
-
-    // var tabId = parseInt(details.tabId);
-    // // get tab Details 
-    // var tabDetails = getTabDetails(tabId);
-    
+  if (!isValidObject(details) || details.tabId==null || details.tabId<0  || isValidUrl(details.url)==false ){ return false}
+  //process all tabs    
     processAllTabs();
-  
 
   },
   {
@@ -67,62 +60,15 @@ chrome.webRequest.onCompleted.addListener( function(details) {
 
 
 //event listner for tab close : update all values 
-chrome.tabs.onRemoved.addListener(function(tabId, removeInfo){
-  //if its not a valid url dont bother  
-  //if(tabId<0){return false;}
-  // if its a valid url, check if other instances are still running 
-  //alert('closed');
+chrome.tabs.onRemoved.addListener(function(tabId, removeInfo){  
   processAllTabs();
 
 });
 
 //update global tabs object when new tab is created
 chrome.tabs.onCreated.addListener(function(tab){
-  //if its not a valid url dont bother  
-  //if(tabId<0){return false;}
-  // if its a valid url, check if other instances are still running 
-  //alert('open');
   processAllTabs();
 });
-
-//handle the tab close event 
-// function processTabClose(tabId){
-
-//   //get url for closed tab
-//   if(tabId<0){return false;} 
-
-//   chrome.tabs.get(tabId,function(tabDetails){
-//     var closedUrl = tabDetails.url;
-//     var closeUrlBase = isValidUrl(closedUrl); //domain name of the tab url
-//     //if url is not valid do nothing
-//     alert(closeUrlBase+' removed')
-//     if(!closeUrlBase){return false;}
-//     // check if any existing instance of the url exists
-//     chrome.tabs.query({}, function(tabs) { 
-//       for(var tab in tabs){
-//         var curUrl = isValidUrl(tab.url);
-//         //if another instance is open, do nothing
-//         if(curUrl==closeUrlBase){  return false}        
-//       }
-//     //no other instance was open, last tab was closed , update the counters
-//       var updates = {closeUrlBase:0} //  set the counter to zero, no updates for this url
-//       updateCounters(updates);
-//       //update the icon text
-//       updateIcon();
-
-
-//     });
-
-
-//   });
-  
-// }
-
-
-// //process popup html creation 
-// function createPopupHtml(filterValids){
-
-// }
 
 
 
@@ -179,7 +125,7 @@ function getAllTabDetails(){
 
     });
   
-  return tempUpdates;
+  return true;
 }
 
 
@@ -187,8 +133,7 @@ function getAllTabDetails(){
 
 // get tab list for popup html
 function getTabList(filterValids){
-  chrome.tabs.query({}, function(tabs) { 
-    //console.log(tabs)
+  chrome.tabs.query({}, function(tabs) {  
     
     if(isValidObject(tabs)){
       filterValids = (typeof filterValids == 'undefined') ? false : true;
@@ -206,43 +151,12 @@ function getTabList(filterValids){
   
 }
 
-// Get url from tabID
-// function getTabDetails(tabId){
-//   if(tabId<0){ return false}
-
-//     chrome.tabs.get(tabId,function(tabDetails){
-//       if(isValidObject(tabDetails)){
-//         if(tabDetails.url==null){ return false}
-//             // check if url is valid
-//           var curValidUrl = isValidUrl(tabDetails.url);
-//           if(!curValidUrl){ return false}
-//             // check if title is valid
-//           if(!isValidTitle(tabDetails.title)){return  false}
-//             // get updated values
-//           var updates = {}
-//           updates[curValidUrl] =  getUpdates(tabDetails.title) ;
-
-//             //update counters 
-//             updateCounters(updates);
-//             //update UI and icon
-//             updateIcon(updates);
-//             // var tabHtml = createListHtml(tabs,filterValids);
-//             // // show poup html
-//             // updateUIHtml(ID_TABLIST,tabHtml);
-            
-//           }else{ return false}
-//         });
-// }
-
-
 // parse the title and return the counter value
 function getUpdates(title){
   var matches = validTitleFormat.exec(title);
   if(!isValidObject(matches) || matches.length<2){ return false}
     return matches[1];
 }
-
-// send the information back to the controller
 
 
 // update the updates counter after ajax request
@@ -259,10 +173,6 @@ function updateCounters(updates){
     
   }
   
-  //console.log(counters)
-  //updateCurrentCounter();
-  // alert(JSON.stringify(updates));
-  // alert(JSON.stringify(counters));
   currentCounter = cur;
   return true;
 }
@@ -274,7 +184,7 @@ function updateCurrentCounter(){
      cur+= parseInt(counters[k]);
    }
  }
- //alert(cur)
+
  currentCounter = cur;
  return currentCounter;
 }

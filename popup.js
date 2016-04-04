@@ -1,3 +1,14 @@
+/**
+ * popup.js
+ *
+ * @license GNU GPL
+ * @version 0.3
+ * @author Piyush Tripathi ,  http://piyu.tk
+ * @updated 2016
+ *
+ *
+ */
+
 
 //Check if user has clicked the Icon button in the toolbar:
 document.addEventListener('DOMContentLoaded', function() {
@@ -5,12 +16,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
 	//get required tabs
 	chrome.runtime.getBackgroundPage(function(bgPage) {
-		 bgPage.getTabList(true); //filtered tab list
-		 //var updates = bgPage.processAllTabs();
-		
+		 bgPage.getTabList(true); //filtered tab list		 		
 	});
 
-	//wrap up
+
 
 });
 
@@ -32,11 +41,10 @@ var id = temp[1]
 
 //main function which updates the UI elements of popup page
 function updateHtml(id, value){
-  //alert('hello')
   document.getElementById(id).innerHTML = value;
 }
 
-//listen to any request from background page
+//listen to any request from the background page
 chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
 	switch (request.method) 
 	{
@@ -48,5 +56,3 @@ chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
 	}
 });
 
-
-//Check if user has closed any important tabs
