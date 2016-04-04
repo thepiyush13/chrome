@@ -5,7 +5,7 @@ A chrome addon that notifies any new update on any of the opened social media ta
 # Benifits:
 	* Allows to check realtime social media updates without leaving the current tab
 	* Makes it easy to quickly switch to the tab you are interested in, from any window
-	# Features
+# Features
 	* Supports facebook, twitter, Linkedin
 	* Realtime and fast updates
 	* Ability to quickly switch between tabs
