@@ -33,3 +33,12 @@
 
 
 
+Popup.js
+-listen to popup click events
+-update the html 
+-cant listen to ajax request 
+-cant call chrome api
+background.js 
+-cant update html
+-can listen to ajax
+-can use chrome api

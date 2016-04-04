@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	//get required tabs
 	chrome.runtime.getBackgroundPage(function(bgPage) {
 		 bgPage.getTabList(true); //filtered tab list
+		 //var updates = bgPage.processAllTabs();
 		
 	});
 
@@ -28,13 +29,14 @@ var id = temp[1]
 });
 
 
+
 //main function which updates the UI elements of popup page
 function updateHtml(id, value){
   //alert('hello')
   document.getElementById(id).innerHTML = value;
 }
 
-
+//listen to any request from background page
 chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
 	switch (request.method) 
 	{
