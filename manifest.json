@@ -1,15 +1,22 @@
 {
   "manifest_version": 2,
 
-  "name": "Pingify: Get realtime tab notifications",
-  "description": "A chrome addon that notifies any new update on any opened tab in chrome and allows to quickyl switch to it",
-  "version": "1.0",
+  "name": "Pingify: Realtime social notifications",
+  "description": "Get realtime facebook, twitter, linkedin tabs notifications & switch to the tab from any window ",
+  "version": "0.0.0.1",
+  "icons": { 
+  	"16": "img/icon-16.png",
+  	"32": "img/icon-32.png",
+           "48": "img/icon-48.png",
+          "128": "img/icon-128.png" ,
+"480": "img/icon-480.png"
+          },
   "background": {
         "scripts": ["background.js"],
         "persistent": true
     },
   "browser_action": {
-    "default_icon": "icon.png",
+    "default_icon": "img/icon.png",
     "default_popup": "popup.html"
   },
   "content_scripts": [{

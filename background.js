@@ -15,11 +15,11 @@
 //global tab object :
 var gTab ={}
 //urls which are to be processed
-var validUrls = {"facebook.com":true, "twitter.com":true,"linkedin.com":true};
+var validUrls = {"facebook.com":true, "twitter.com":true,"google.com":true,};
 //no of updates for each url
-var counters = {"facebook.com": 0, "twitter.com": 0,"linkedin.com":0};
+var counters = {"facebook.com": 0, "twitter.com": 0,"google.com":0};
 //valid title for tab page
-var validTitleFormat  = /^\(([^)]+)\)/  //(x) new updates
+var validTitleFormat  = /\(([^)]+)\)/  //(x) new updates
 //counter for toolbar icon
 var currentCounter = 0
 // id of the HTML element to be  updated
@@ -48,6 +48,9 @@ chrome.webRequest.onCompleted.addListener( function(details) {
   // check if the details are valid  
   
   if (!isValidObject(details) || details.tabId==null || details.tabId<0  || isValidUrl(details.url)==false ){ return false}
+  //check for gmail only requests
+  
+  
   //process all tabs    
     processAllTabs();
 
@@ -153,7 +156,11 @@ function getTabList(filterValids){
 
 // parse the title and return the counter value
 function getUpdates(title){
-  var matches = validTitleFormat.exec(title);
+  if (typeof title !== 'string') {
+    return false;
+}
+  var cleanTitle = title.replace(",","");
+  var matches = validTitleFormat.exec(cleanTitle);
   if(!isValidObject(matches) || matches.length<2){ return false}
     return matches[1];
 }
@@ -174,7 +181,7 @@ function updateCounters(updates){
   }
   
   currentCounter = cur;
-  return true;
+  return cur;
 }
 
 function updateCurrentCounter(){
@@ -215,6 +222,11 @@ chrome.tabs.update(parseInt(id), {active: true});
 function isValidUrl(url){
   if(url==null || url=="" || typeof url !== 'string'){return false;}
   //var hostname = (new URL(url)).hostname;
+  //check if it`s a valid gmail reqest
+  // lot of google services call *.google.com thus we only need gmail only request
+  if(!isValidGmailRequest(url)){
+  	return false;
+  }
   return getBaseUrl(url);  
 
 }
@@ -258,6 +270,19 @@ function isValidObject(a){
   //tested
 }
 
+//if *.google.com ajax request is from Gmail
+function isValidGmailRequest(url){
+	var baseDomain = getDomain(url);
+  var subDomain = 	getHostName(url);
+  if(baseDomain=="google.com"){
+  	if(subDomain!="mail.google.com"){
+  		//non gmail call
+  		return false;
+  	}
+
+  }
+  return true;
+}
 
 //http://www.primaryobjects.com/2012/11/19/parsing-hostname-and-domain-from-a-url-with-javascript/
 

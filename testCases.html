@@ -61,13 +61,16 @@
     assert.equal(getUpdates("(20) News about(10( Arsenal on Twitter"), 20);
     assert.equal(getUpdates("(20) News about( Arsenal20) on Twitter"), 20);
     assert.equal(getUpdates("News about()()()() Arsenal on Twitter"), false);
-    assert.equal(getUpdates("122 (2)News about()()()() Arsenal on Twitter"), false);
+    assert.equal(getUpdates("122 (2)News about()()()() Arsenal on Twitter"), 2);
     assert.equal(getUpdates("()()()News about()()()() Arsenal on Twitter"), false);
     assert.equal(getUpdates("(1000000000000) News about Arsenal on Twitter"), 1000000000000);
     assert.equal(getUpdates("Facebook"), false);
     assert.equal(getUpdates("Facebook"), false);
-    assert.equal(getUpdates("Facebook(23)(1212)"), false);
+    assert.equal(getUpdates("Facebook(23)(1212)"), 23);
     assert.equal(getUpdates("(23) 0ok(23)(1212)"), 23);
+    //testing for gmail
+    assert.equal(getUpdates('"Frequent/Tamu" (23,705) - 31kcori@gmail.com - Gmail'), 23705);
+    
 
   });
  // //testing isValidObject function
@@ -88,6 +91,15 @@
     assert.equal(isValidUrl("https://fb.com.twitter/GOAL_ID"), false);
     assert.equal(isValidUrl("https://www.facebook.com/salegroups/?group_sell_ref=landing_page_bookmark&view=landing_page_suggested_groups"), "facebook.com");
     assert.equal(isValidUrl("https://m.facebook.com/salegroups/?group_sell_ref=twitter.com&view=landing_page_suggested_groups"), "facebook.com");
+    assert.equal(isValidUrl("https://mail.google.com/mail/u/0/channel/bind?OSID=525F0A5B2F19D550&OAID=20&VER=8&at=AF6bupNMF6EhJILPGKzOUwa7cX7ENaY0fg&RID=rpc&SID=C475F16C77945619&CI=0&AID=21&TYPE=xmlhttp&zx=kjesbgrmkce1&t=1"),"google.com");
+});
+   //test for hostname 
+   QUnit.test("isValidGmailRequest", function( assert ) {
+    assert.equal(isValidGmailRequest("https://mail.google.com/mail/u/0/channel/bind?VER=8&at=AF6bupNMF6EhJILPGKzOUwa7cX7ENaY0fg&RID=rpc&SID=D7EBBCA73CA0F538&CI=0&AID=19&TYPE=xmlhttp&zx=q2cx3rfzdyal&t=1"), true);
+    assert.equal(isValidGmailRequest("https://docs.google.com/document/d/1ltWOadDtizRJDXka1q5sFtOGLoIhCOu_"), false);
+  
+    assert.equal(isValidGmailRequest("https://0.docs.google.com/document/d/1ltWOadDtizRJDXka1q5sFtOGLoIhCOu_"), false);
+    assert.equal(isValidGmailRequest("https://google.com/document/d/1ltWOadDtizRJDXka1q5sFtOGLoIhCOu_"), false);
 
     // TEST FOR TABLIST ON POPUP AND TAB SWITCH IS TESTED OK
 
