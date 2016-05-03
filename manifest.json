@@ -1,8 +1,8 @@
 {
   "manifest_version": 2,
 
-  "name": "Pingify: Realtime social notifications",
-  "description": "Get realtime facebook, twitter, linkedin tabs notifications & switch to the tab from any window ",
+  "name": "Pingify: Realtime Gmail, Facebook, Twitter notifications",
+  "description": "Get realtime facebook, twitter, gmail tabs notifications & switch to the tab from any window ",
   "version": "0.0.0.1",
   "icons": { 
   	"16": "img/icon-16.png",
